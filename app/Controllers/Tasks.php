@@ -40,4 +40,31 @@ class Tasks extends ResourceController
             return $this->failNotFound('Task not found');
         }
     }
+
+    public function createTask()
+    {
+        $rules = [
+            'title' => 'required|max_length[255]',
+            'description' => 'required'
+        ];
+
+        if (! $this->validate($rules)) {
+            return $this->response->setStatusCode(422)->setJSON([
+                'status' => 'error',
+                'errors' => $this->validator->getErrors(),
+            ]);
+        }
+
+        return $this->response->setJSON([
+            'status' => 'success',
+            'data' => ['title' => $this->request->getJSON()->title],
+        ]);
+    }
+
+    // TEST using curl
+    // error post: 
+    // '{"title" : "", "description" : ""}' | curl.exe -i -X POST http://localhost:8080/api/tasks -H "Content-Type: application/json" --data-binary "@-"
+    
+    // success post: 
+    // '{"title" : "New Task", "description" : "Task description"}' | curl.exe -i -X POST http://localhost:8080/api/tasks -H "Content-Type: application/json" --data-binary "@-"
 }

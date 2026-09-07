@@ -25,13 +25,24 @@ class Pages extends BaseController
 
     public function submitContact(): string
     {
-        $name = $this->request->getPost('name');
-        $email = $this->request->getPost('email');
+        $rules = [
+            'name' => 'required|min_length[3]|max_length[10]',
+            'email' => 'required|valid_email',
+        ];
+        
+        if (!$this->validate($rules)) {
+            return view('pages/contact', [
+                'title' => 'Contact Us',
+                'errors' => $this->validator->getErrors(),
+                'name' => $this->request->getPost('name'),
+                'email' => $this->request->getPost('email'),
+            ]);
+        }
 
         $data = [
             'title' => 'Contact Us',
-            'name' => $name,
-            'email' => $email,
+            'name' => $this->request->getPost('name'),
+            'email' => $this->request->getPost('email'),
         ];
 
         return view('pages/contact_success', $data);
