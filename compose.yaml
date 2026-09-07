@@ -1,5 +1,6 @@
 services:
   app:
+    image: compass-web
     build:
       context: .
     ports:
