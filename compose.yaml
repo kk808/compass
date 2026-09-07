@@ -1,0 +1,17 @@
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      CI_ENVIRONMENT: development
+      app_baseURL: http://localhost:8080/
+      app_indexPage: ""
+    volumes:
+      - ./app:/var/www/html/app:ro
+      - ./public:/var/www/html/public:ro
+      - app-writable:/var/www/html/writable
+
+volumes:
+  app-writable:

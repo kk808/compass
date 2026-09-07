@@ -44,6 +44,34 @@ php spark serve
 
 The application will be available at `http://localhost:8080`.
 
+### Local Development with Docker Compose
+
+Install Docker Desktop with Linux containers enabled, then run from the project root:
+
+```bash
+docker compose up --build -d
+```
+
+Open `http://localhost:8080`. Stop any existing `php spark serve` process first
+if it is using port 8080. Local PHP and Composer installations are not required.
+
+Compose runs PHP 8.3 with Apache in development mode. Changes in `app/` and
+`public/` are reflected immediately through bind mounts. Dependencies are installed
+in the image; rerun the build command after changing `composer.json`,
+`composer.lock`, the Dockerfile, or `apache.conf`. This uses the Dockerfile's
+production dependencies, so PHPUnit and other development packages are not included.
+
+Runtime files persist in the `app-writable` Docker volume. App configuration can
+be added under `environment` in `compose.yaml`; the project's `env` template and
+local `.env` file are not loaded into the container.
+
+View logs or stop the app:
+
+```bash
+docker compose logs -f app
+docker compose down
+```
+
 ## Important Change with index.php
 
 `index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
