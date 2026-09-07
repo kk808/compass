@@ -28,6 +28,22 @@ to your `app` folder. The affected files can be copied or merged from
 Copy `env` to `.env` and tailor for your app, specifically the baseURL
 and any database settings.
 
+## Local Development
+
+After cloning the repository, install the Composer dependencies:
+
+```bash
+composer install
+```
+
+Start the local development server with:
+
+```bash
+php spark serve
+```
+
+The application will be available at `http://localhost:8080`.
+
 ## Important Change with index.php
 
 `index.php` is no longer in the root of the project! It has been moved inside the *public* folder,

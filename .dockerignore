@@ -1,0 +1,9 @@
+.git
+.agents
+.codex
+vendor/
+.env
+.env.*
+env
+tests/
+writable/
