@@ -15,3 +15,8 @@ $routes->get('docs', 'ApiDocs::index');
 $routes->get('contact', 'Pages::contact');
 $routes->post('contact/submit', 'Pages::submitContact');
 $routes->get('about', 'Pages::about');
+
+$routes->get('tasks', 'TaskController::index');
+$routes->post('tasks', 'TaskController::create');
+$routes->post('tasks/(:num)/update', 'TaskController::update/$1');
+$routes->post('tasks/(:num)/delete', 'TaskController::delete/$1');

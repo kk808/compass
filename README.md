@@ -1,3 +1,4 @@
+-- Active: 1788842050105@@127.0.0.1@3306@ci_tasks
 # CodeIgniter 4 Application Starter
 
 ## What is CodeIgniter?
@@ -32,9 +33,90 @@ and any database settings.
 
 After cloning the repository, install the Composer dependencies:
 
+On Windows, ensure that the PHP configuration used by Composer and the CLI
+enables the `intl`, `zip`, and `mysqli` extensions. Run `php --ini` to find the
+active `php.ini`, then uncomment these lines if they are disabled:
+
+```ini
+extension=intl
+extension=zip
+extension=mysqli
+```
+
 ```bash
 composer install
 ```
+
+### Database setup and seeding
+
+Run PHP locally and MySQL in Docker. Start Docker Desktop with Linux containers
+enabled. If you already have a MySQL container, start it and use its published
+port, database name, and credentials in `.env` below.
+
+For a new development database, run this command once. These example passwords
+are for local development:
+
+```powershell
+docker run --name ic4-mysql -e MYSQL_ROOT_PASSWORD=local_root_password -e MYSQL_DATABASE=compass -e MYSQL_USER=root -e MYSQL_PASSWORD=root -p 127.0.0.1:3306:3306 -v ic4-mysql-data:/var/lib/mysql -d mysql:8.4
+```
+
+The image creates the `compass` database and user on first startup. Database files
+persist in the `ic4-mysql-data` volume. Wait until `docker logs ic4-mysql`
+shows that MySQL is ready for connections before running migrations.
+
+For subsequent sessions, start the existing container with
+`docker start ic4-mysql`; stop it with `docker stop ic4-mysql`.
+Initialization variables only apply to an empty data directory; changing them
+does not update credentials in an existing volume.
+
+If `.env` does not exist, copy the `env` template (PowerShell):
+
+```powershell
+Copy-Item env .env
+```
+
+Update these settings in `.env`, removing any leading `#`. Replace the example
+values if you are using an existing container. The database user must have
+permission to create tables and read and write records in the `compass` database.
+
+```ini
+CI_ENVIRONMENT = development
+app.baseURL = 'http://localhost:8080/'
+
+database.default.hostname = 127.0.0.1:3306
+database.default.database = compass
+database.default.username = root
+database.default.password = root
+database.default.DBDriver = MySQLi
+database.default.port = 3306
+```
+
+If host port 3306 is already in use, publish `127.0.0.1:3307:3306` instead and set
+`database.default.port = 3307`.
+
+From the project root on your host machine, create the tables, check migration
+status, and insert the sample tasks:
+
+```bash
+php spark migrate
+php spark migrate:status
+php spark db:seed TaskSeeder
+
+# rollback
+php spark migrate:rollback
+```
+
+The migration creates the `tasks` table. `TaskSeeder` inserts these three records:
+
+| Title | Status |
+| --- | --- |
+| Learn PHP basics | Pending |
+| Build a controller | Completed |
+| Forms in PHP | Completed |
+
+Each seeder run inserts three additional records, so run it once for the initial
+sample data. Migrations create tables inside the configured database; they do not
+create the MySQL database itself.
 
 Start the local development server with:
 
@@ -42,7 +124,13 @@ Start the local development server with:
 php spark serve
 ```
 
-The application will be available at `http://localhost:8080`.
+The application will be available at `http://localhost:8080`. Open
+`http://localhost:8080/tasks` to view and manage the database records.
+
+If the database connection fails, check `docker ps` and `docker logs ic4-mysql`,
+then confirm that the host, published port, credentials, and database name in
+`.env` match your container. If the
+`tasks` table is missing, run `php spark migrate` before seeding.
 
 ### Local Development with Docker Compose
 
@@ -64,6 +152,32 @@ production dependencies, so PHPUnit and other development packages are not inclu
 Runtime files persist in the `app-writable` Docker volume. App configuration can
 be added under `environment` in `compose.yaml`; the project's `env` template and
 local `.env` file are not loaded into the container.
+
+The current Compose file starts only the PHP app. To connect it to the MySQL
+container above through Docker Desktop's host, add these entries under the
+`app` service's `environment` mapping in `compose.yaml`:
+
+```yaml
+      database.default.hostname: host.docker.internal
+      database.default.database: compass
+      database.default.username: compass
+      database.default.password: local_compass_password
+      database.default.DBDriver: MySQLi
+      database.default.port: 3306
+```
+
+Use your MySQL container's credentials and published host port. Recreate the app
+and run migrations and seeding inside it (skip seeding if this database already
+has the sample records):
+
+```bash
+docker compose up -d
+docker compose exec app php spark migrate
+docker compose exec app php spark db:seed TaskSeeder
+```
+
+Open `http://localhost:8080/tasks` to see the records. Inside the app container,
+`127.0.0.1` refers to the app itself, so use `host.docker.internal` for this setup.
 
 View logs or stop the app:
 
@@ -110,4 +224,5 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 
 - json (enabled by default - don't turn it off)
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
+- [mysqli](http://php.net/manual/en/mysqli.installation.php) if you plan to use MySQL through CodeIgniter's MySQLi driver
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
