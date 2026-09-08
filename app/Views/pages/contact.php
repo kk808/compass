@@ -1,3 +1,6 @@
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
 <!-- contact page -->
 <h1>Contact Us</h1>
 <form action="/contact/submit" method="post">
@@ -19,3 +22,4 @@
     <br>
     <button type="submit">Submit</button>
 </form>
+<?= $this->endSection() ?>

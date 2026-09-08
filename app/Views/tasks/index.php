@@ -1,12 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tasks</title>
-</head>
-<body>
-    <main>
+<?= $this->setVar('title', 'Tasks')->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
         <h1>Tasks</h1>
 
         <form action="<?= esc(site_url('tasks'), 'attr') ?>" method="post">
@@ -58,6 +52,4 @@
                 </tbody>
             </table>
         <?php endif; ?>
-    </main>
-</body>
-</html>
+<?= $this->endSection() ?>

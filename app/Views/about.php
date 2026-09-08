@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
+<?= $this->setData(['title' => 'About', 'bodyClass' => 'about-page', 'contentClass' => 'about-content'])->extend('layouts/main') ?>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About</title>
-    <link rel="stylesheet" href="/css/about.css">
-</head>
+<?= $this->section('styles') ?>
+    <link rel="stylesheet" href="<?= esc(base_url('css/about.css'), 'attr') ?>">
+<?= $this->endSection() ?>
 
-<body class="about-page">
-    <main class="about-content">
-        <h1>Hello, world!</h1>
-    </main>
-</body>
-
-</html>
+<?= $this->section('content') ?>
+    <h1>Hello, world!</h1>
+<?= $this->endSection() ?>

@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Compass Tasks API</title>
+<?= $this->setVar('title', 'Compass Tasks API')->extend('layouts/main') ?>
+
+<?= $this->section('styles') ?>
     <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5.25.3/swagger-ui.css">
-</head>
-<body>
+<?= $this->endSection() ?>
+<?= $this->section('content') ?>
     <div id="swagger-ui"></div>
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
     <script src="https://unpkg.com/swagger-ui-dist@5.25.3/swagger-ui-bundle.js"></script>
     <script>
         // Resolve against this page so requests use the same host and port.
@@ -23,5 +23,4 @@
             presets: [SwaggerUIBundle.presets.apis]
         });
     </script>
-</body>
-</html>
+<?= $this->endSection() ?>
