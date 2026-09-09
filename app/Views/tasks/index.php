@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
         <h1>Tasks</h1>
 
-        <form action="<?= esc(site_url('tasks'), 'attr') ?>" method="post">
+        <form class="task-form" action="<?= esc(site_url('tasks'), 'attr') ?>" method="post">
             <?= csrf_field() ?>
             <label for="title">New task</label>
             <input type="text" id="title" name="title" maxlength="255" required>
@@ -13,7 +13,7 @@
         <?php if (empty($tasks)): ?>
             <p>No tasks yet. Add your first task above.</p>
         <?php else: ?>
-            <table>
+            <table class="task-table">
                 <caption><?= count($tasks) ?> task records</caption>
                 <thead>
                     <tr>
@@ -35,7 +35,7 @@
                         <?php endif; ?>
                         </td>
                         <td><?= $task['done'] ? 'Completed' : 'Pending' ?></td>
-                        <td>
+                        <td class="task-actions">
                         <form action="<?= esc(site_url('tasks/' . (int) $task['id'] . '/update'), 'attr') ?>" method="post">
                             <?= csrf_field() ?>
                             <input type="hidden" name="done" value="<?= $task['done'] ? '0' : '1' ?>">
@@ -44,7 +44,7 @@
 
                         <form action="<?= esc(site_url('tasks/' . (int) $task['id'] . '/delete'), 'attr') ?>" method="post">
                             <?= csrf_field() ?>
-                            <button type="submit">Delete</button>
+                            <button class="btn-delete" type="submit">Delete</button>
                         </form>
                         </td>
                     </tr>

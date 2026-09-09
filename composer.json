@@ -38,6 +38,7 @@
         "sort-packages": true
     },
     "scripts": {
+        "start": "php spark serve",
         "test": "phpunit"
     }
 }

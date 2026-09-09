@@ -1,14 +1,58 @@
+:root {
+    --page-max-width: 1200px;
+}
+
+main {
+    padding: 1rem;
+    margin: auto;
+    max-width: var(--page-max-width);
+}
+
+input[type="text"] {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+}
+
+button {
+    padding: 0.5rem 1rem;
+    border: 1px solid #ddd;
+    background: #f7f8f9;
+    cursor: pointer;
+    border-radius: 0.25rem;
+
+    &:hover {
+        background: #e2e4e6;
+    }
+}
+
+button.btn-delete {
+    border-color: #f87171;
+    background: #fef2f2;
+    color: #b91c1c;
+
+    &:hover {
+        background: #f87171;
+        color: #fff;
+    }
+}
+
 .site-header {
     background: #f7f8f9;
     border-bottom: 1px solid #ddd;
     padding: 0.75rem 1rem;
     font: 1rem/1.5 Arial, sans-serif;
+    display: flex;
+    justify-content: center;
 }
 
 .site-nav {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem 1.5rem;
+    justify-content: flex-end;
+    max-width: var(--page-max-width);
+    width: 100%;
 }
 
 .site-nav a {
@@ -24,4 +68,35 @@
 .site-nav a:focus-visible {
     outline: 2px solid #1d4ed8;
     outline-offset: 2px;
+}
+
+.task-form {
+    margin: 1rem;
+}
+
+.task-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.task-table th,
+.task-table td {
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.task-table th {
+    background: #404040;
+    color: #fff;
+    padding: 1rem;
+}
+
+.task-table tr:hover {
+    background: #f9f9f9;
+}
+
+.task-actions form {
+    display: inline;
+    margin-right: 0.5rem;
 }
