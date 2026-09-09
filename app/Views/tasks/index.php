@@ -55,7 +55,9 @@
             </tbody>
         </table>
         
-        <?= $pager->links() ?>
+        <div class="pagination-container">
+            <?= $pager->links() ?>
+        </div>
 
     <?php endif; ?>
 <?= $this->endSection() ?>

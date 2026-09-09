@@ -160,6 +160,11 @@ button.btn-delete {
     margin-right: 0.5rem;
 }
 
+.pagination-container nav {
+    display: flex;
+    justify-content: center;
+}
+
 .pagination {
     display: flex;
     flex-wrap: wrap;
