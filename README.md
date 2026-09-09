@@ -226,3 +226,6 @@ Additionally, make sure that the following extensions are enabled in your PHP:
 - [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
 - [mysqli](http://php.net/manual/en/mysqli.installation.php) if you plan to use MySQL through CodeIgniter's MySQLi driver
 - [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+
+## MySql Database
+Use [aiven](https://console.aiven.io/account/a5dc91c94a54/project/compass-ic4/services) public mysql database

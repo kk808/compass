@@ -6,9 +6,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 // $routes->get('about', 'Home::about');
 
-$routes->get('api/tasks', 'Tasks::index');
-$routes->get('api/tasks/(:num)', 'Tasks::show/$1');
-$routes->post('api/tasks', 'Tasks::createTask');
+// $routes->get('api/tasks', 'Tasks::index');
+// $routes->get('api/tasks/(:num)', 'Tasks::show/$1');
+// $routes->post('api/tasks', 'Tasks::createTask');
 
 $routes->get('docs', 'ApiDocs::index');
 
@@ -20,3 +20,7 @@ $routes->get('tasks', 'TaskController::index');
 $routes->post('tasks', 'TaskController::create');
 $routes->post('tasks/(:num)/update', 'TaskController::update/$1');
 $routes->post('tasks/(:num)/delete', 'TaskController::delete/$1');
+
+$routes->group('api', ['filter' => 'cors'], function ($routes) {
+    $routes->resource('tasks', ['controller' => 'Api\TaskController']);
+});
