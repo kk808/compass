@@ -1,171 +1,420 @@
 {
-  "openapi": "3.0.3",
-  "info": {
-    "title": "Compass Tasks API",
-    "version": "1.0.0",
-    "description": "Learning API. POST validates input and echoes the title; tasks are not saved."
-  },
-  "servers": [
-    {
-      "url": "./"
-    }
-  ],
-  "paths": {
-    "/api/tasks": {
-      "get": {
-        "tags": [
-          "Tasks"
-        ],
-        "summary": "List tasks",
-        "responses": {
-          "200": {
-            "description": "Task list",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Task"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "Tasks"
-        ],
-        "summary": "Submit a task",
-        "description": "Validates the JSON body. Returns the title without saving a task.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "title",
-                  "description"
+    "openapi":  "3.0.3",
+    "info":  {
+                 "title":  "Compass Tasks API",
+                 "version":  "1.1.0",
+                 "description":  "JSON API for listing, retrieving, creating, updating, and deleting persisted tasks. Writable fields are title and done."
+             },
+    "servers":  [
+                    {
+                        "url":  "./"
+                    }
                 ],
-                "properties": {
-                  "title": {
-                    "type": "string",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "description": {
-                    "type": "string",
-                    "minLength": 1
-                  }
-                }
+    "paths":  {
+                  "/api/tasks":  {
+                                     "get":  {
+                                                 "tags":  [
+                                                              "Tasks"
+                                                          ],
+                                                 "summary":  "List tasks",
+                                                 "responses":  {
+                                                                   "200":  {
+                                                                               "description":  "Task list",
+                                                                               "content":  {
+                                                                                               "application/json":  {
+                                                                                                                        "schema":  {
+                                                                                                                                       "type":  "array",
+                                                                                                                                       "items":  {
+                                                                                                                                                     "$ref":  "#/components/schemas/Task"
+                                                                                                                                                 }
+                                                                                                                                   }
+                                                                                                                    }
+                                                                                           }
+                                                                           }
+                                                               }
+                                             },
+                                     "post":  {
+                                                  "tags":  [
+                                                               "Tasks"
+                                                           ],
+                                                  "summary":  "Create a task",
+                                                  "description":  "Saves a task. Title is required and must not exceed 255 characters. Done defaults to 0 when omitted.",
+                                                  "requestBody":  {
+                                                                      "content":  {
+                                                                                      "application/json":  {
+                                                                                                               "schema":  {
+                                                                                                                              "$ref":  "#/components/schemas/CreateTask"
+                                                                                                                          },
+                                                                                                               "examples":  {
+                                                                                                                                "valid":  {
+                                                                                                                                              "summary":  "New task",
+                                                                                                                                              "value":  {
+                                                                                                                                                            "done":  0,
+                                                                                                                                                            "title":  "Learn PHP"
+                                                                                                                                                        }
+                                                                                                                                          },
+                                                                                                                                "invalid":  {
+                                                                                                                                                "summary":  "Missing title (400)",
+                                                                                                                                                "value":  {
+                                                                                                                                                              "title":  ""
+                                                                                                                                                          }
+                                                                                                                                            }
+                                                                                                                            }
+                                                                                                           }
+                                                                                  },
+                                                                      "required":  true
+                                                                  },
+                                                  "responses":  {
+                                                                    "201":  {
+                                                                                "content":  {
+                                                                                                "application/json":  {
+                                                                                                                         "schema":  {
+                                                                                                                                        "$ref":  "#/components/schemas/Task"
+                                                                                                                                    }
+                                                                                                                     }
+                                                                                            },
+                                                                                "description":  "Saved task"
+                                                                            },
+                                                                    "400":  {
+                                                                                "content":  {
+                                                                                                "application/json":  {
+                                                                                                                         "schema":  {
+                                                                                                                                        "$ref":  "#/components/schemas/Error"
+                                                                                                                                    },
+                                                                                                                         "example":  {
+                                                                                                                                         "status":  400,
+                                                                                                                                         "error":  400,
+                                                                                                                                         "messages":  {
+                                                                                                                                                          "title":  "The title field is required."
+                                                                                                                                                      }
+                                                                                                                                     }
+                                                                                                                     }
+                                                                                            },
+                                                                                "description":  "Title validation failed"
+                                                                            }
+                                                                }
+                                              }
+                                 },
+                  "/api/tasks/{id}":  {
+                                          "get":  {
+                                                      "tags":  [
+                                                                   "Tasks"
+                                                               ],
+                                                      "summary":  "Get a task by ID",
+                                                      "responses":  {
+                                                                        "200":  {
+                                                                                    "content":  {
+                                                                                                    "application/json":  {
+                                                                                                                             "schema":  {
+                                                                                                                                            "$ref":  "#/components/schemas/Task"
+                                                                                                                                        }
+                                                                                                                         }
+                                                                                                },
+                                                                                    "description":  "Saved task"
+                                                                                },
+                                                                        "404":  {
+                                                                                    "content":  {
+                                                                                                    "application/json":  {
+                                                                                                                             "schema":  {
+                                                                                                                                            "$ref":  "#/components/schemas/Error"
+                                                                                                                                        },
+                                                                                                                             "example":  {
+                                                                                                                                             "status":  404,
+                                                                                                                                             "error":  404,
+                                                                                                                                             "messages":  {
+                                                                                                                                                              "error":  "Task with id 1 not found"
+                                                                                                                                                          }
+                                                                                                                                         }
+                                                                                                                         }
+                                                                                                },
+                                                                                    "description":  "Task not found"
+                                                                                }
+                                                                    }
+                                                  },
+                                          "parameters":  [
+                                                             {
+                                                                 "example":  1,
+                                                                 "name":  "id",
+                                                                 "in":  "path",
+                                                                 "schema":  {
+                                                                                "type":  "integer",
+                                                                                "minimum":  1
+                                                                            },
+                                                                 "required":  true
+                                                             }
+                                                         ],
+                                          "put":  {
+                                                      "summary":  "Update a task",
+                                                      "tags":  [
+                                                                   "Tasks"
+                                                               ],
+                                                      "description":  "Updates supplied title and/or done fields and returns the saved task. Omitted fields retain their values. The controller does not apply create-time title validation to updates.",
+                                                      "responses":  {
+                                                                        "200":  {
+                                                                                    "content":  {
+                                                                                                    "application/json":  {
+                                                                                                                             "schema":  {
+                                                                                                                                            "$ref":  "#/components/schemas/Task"
+                                                                                                                                        }
+                                                                                                                         }
+                                                                                                },
+                                                                                    "description":  "Saved task"
+                                                                                },
+                                                                        "404":  {
+                                                                                    "content":  {
+                                                                                                    "application/json":  {
+                                                                                                                             "schema":  {
+                                                                                                                                            "$ref":  "#/components/schemas/Error"
+                                                                                                                                        },
+                                                                                                                             "example":  {
+                                                                                                                                             "status":  404,
+                                                                                                                                             "error":  404,
+                                                                                                                                             "messages":  {
+                                                                                                                                                              "error":  "Task with id 1 not found"
+                                                                                                                                                          }
+                                                                                                                                         }
+                                                                                                                         }
+                                                                                                },
+                                                                                    "description":  "Task not found"
+                                                                                }
+                                                                    },
+                                                      "requestBody":  {
+                                                                          "content":  {
+                                                                                          "application/json":  {
+                                                                                                                   "schema":  {
+                                                                                                                                  "$ref":  "#/components/schemas/UpdateTask"
+                                                                                                                              },
+                                                                                                                   "example":  {
+                                                                                                                                   "done":  1
+                                                                                                                               }
+                                                                                                               }
+                                                                                      },
+                                                                          "required":  true
+                                                                      }
+                                                  },
+                                          "patch":  {
+                                                        "summary":  "Update a task",
+                                                        "tags":  [
+                                                                     "Tasks"
+                                                                 ],
+                                                        "description":  "Updates supplied title and/or done fields and returns the saved task. Omitted fields retain their values. The controller does not apply create-time title validation to updates. Cross-origin browser PATCH requests are not currently allowed by the configured CORS allowedMethods.",
+                                                        "responses":  {
+                                                                          "200":  {
+                                                                                      "content":  {
+                                                                                                      "application/json":  {
+                                                                                                                               "schema":  {
+                                                                                                                                              "$ref":  "#/components/schemas/Task"
+                                                                                                                                          }
+                                                                                                                           }
+                                                                                                  },
+                                                                                      "description":  "Saved task"
+                                                                                  },
+                                                                          "404":  {
+                                                                                      "content":  {
+                                                                                                      "application/json":  {
+                                                                                                                               "schema":  {
+                                                                                                                                              "$ref":  "#/components/schemas/Error"
+                                                                                                                                          },
+                                                                                                                               "example":  {
+                                                                                                                                               "status":  404,
+                                                                                                                                               "error":  404,
+                                                                                                                                               "messages":  {
+                                                                                                                                                                "error":  "Task with id 1 not found"
+                                                                                                                                                            }
+                                                                                                                                           }
+                                                                                                                           }
+                                                                                                  },
+                                                                                      "description":  "Task not found"
+                                                                                  }
+                                                                      },
+                                                        "requestBody":  {
+                                                                            "content":  {
+                                                                                            "application/json":  {
+                                                                                                                     "schema":  {
+                                                                                                                                    "$ref":  "#/components/schemas/UpdateTask"
+                                                                                                                                },
+                                                                                                                     "example":  {
+                                                                                                                                     "done":  1
+                                                                                                                                 }
+                                                                                                                 }
+                                                                                        },
+                                                                            "required":  true
+                                                                        }
+                                                    },
+                                          "delete":  {
+                                                         "summary":  "Delete a task",
+                                                         "tags":  [
+                                                                      "Tasks"
+                                                                  ],
+                                                         "responses":  {
+                                                                           "200":  {
+                                                                                       "content":  {
+                                                                                                       "application/json":  {
+                                                                                                                                "schema":  {
+                                                                                                                                               "properties":  {
+                                                                                                                                                                  "id":  {
+                                                                                                                                                                             "oneOf":  [
+                                                                                                                                                                                           {
+                                                                                                                                                                                               "type":  "integer"
+                                                                                                                                                                                           },
+                                                                                                                                                                                           {
+                                                                                                                                                                                               "type":  "string",
+                                                                                                                                                                                               "pattern":  "^[0-9]+$"
+                                                                                                                                                                                           }
+                                                                                                                                                                                       ],
+                                                                                                                                                                             "example":  1
+                                                                                                                                                                         }
+                                                                                                                                                              },
+                                                                                                                                               "type":  "object",
+                                                                                                                                               "required":  [
+                                                                                                                                                                "id"
+                                                                                                                                                            ]
+                                                                                                                                           },
+                                                                                                                                "example":  {
+                                                                                                                                                "id":  "1"
+                                                                                                                                            }
+                                                                                                                            }
+                                                                                                   },
+                                                                                       "description":  "Task deleted; returns the requested ID"
+                                                                                   },
+                                                                           "404":  {
+                                                                                       "content":  {
+                                                                                                       "application/json":  {
+                                                                                                                                "schema":  {
+                                                                                                                                               "$ref":  "#/components/schemas/Error"
+                                                                                                                                           },
+                                                                                                                                "example":  {
+                                                                                                                                                "status":  404,
+                                                                                                                                                "error":  404,
+                                                                                                                                                "messages":  {
+                                                                                                                                                                 "error":  "Task with id 1 not found"
+                                                                                                                                                             }
+                                                                                                                                            }
+                                                                                                                            }
+                                                                                                   },
+                                                                                       "description":  "Task not found"
+                                                                                   }
+                                                                       }
+                                                     }
+                                      }
               },
-              "examples": {
-                "valid": {
-                  "summary": "Valid task",
-                  "value": {
-                    "title": "Learn PHP",
-                    "description": "Practice creating tasks"
-                  }
-                },
-                "invalid": {
-                  "summary": "Missing required values (422)",
-                  "value": {
-                    "title": "",
-                    "description": ""
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Validation succeeded (task is not persisted)",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "success",
-                  "data": {
-                    "title": "Learn PHP"
-                  }
-                }
-              }
-            }
-          },
-          "422": {
-            "description": "Validation failed",
-            "content": {
-              "application/json": {
-                "example": {
-                  "status": "error",
-                  "errors": {
-                    "title": "The title field is required.",
-                    "description": "The description field is required."
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/tasks/{id}": {
-      "get": {
-        "tags": [
-          "Tasks"
-        ],
-        "summary": "Get a task by ID",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "minimum": 0
-            },
-            "example": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Task found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Task"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Task not found"
-          }
-        }
-      }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Task": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "example": 1
-          },
-          "title": {
-            "type": "string",
-            "example": "Learn PHP basics"
-          },
-          "done": {
-            "type": "boolean",
-            "example": false
-          }
-        }
-      }
-    }
-  }
+    "components":  {
+                       "schemas":  {
+                                       "Task":  {
+                                                    "type":  "object",
+                                                    "properties":  {
+                                                                       "id":  {
+                                                                                  "oneOf":  [
+                                                                                                {
+                                                                                                    "type":  "integer"
+                                                                                                },
+                                                                                                {
+                                                                                                    "type":  "string",
+                                                                                                    "pattern":  "^[0-9]+$"
+                                                                                                }
+                                                                                            ],
+                                                                                  "example":  1
+                                                                              },
+                                                                       "title":  {
+                                                                                     "type":  "string",
+                                                                                     "example":  "Learn PHP basics"
+                                                                                 },
+                                                                       "done":  {
+                                                                                    "description":  "0 for incomplete; 1 for complete. Numeric database fields may be returned as strings because the model does not configure casts.",
+                                                                                    "example":  0,
+                                                                                    "oneOf":  [
+                                                                                                  {
+                                                                                                      "type":  "integer",
+                                                                                                      "enum":  [
+                                                                                                                   0,
+                                                                                                                   1
+                                                                                                               ]
+                                                                                                  },
+                                                                                                  {
+                                                                                                      "type":  "string",
+                                                                                                      "enum":  [
+                                                                                                                   "0",
+                                                                                                                   "1"
+                                                                                                               ]
+                                                                                                  }
+                                                                                              ]
+                                                                                },
+                                                                       "created_at":  {
+                                                                                          "readOnly":  true,
+                                                                                          "description":  "Database timestamp (YYYY-MM-DD HH:mm:ss).",
+                                                                                          "example":  "2026-09-09 10:00:00",
+                                                                                          "type":  "string",
+                                                                                          "nullable":  true
+                                                                                      },
+                                                                       "updated_at":  {
+                                                                                          "readOnly":  true,
+                                                                                          "description":  "Database timestamp (YYYY-MM-DD HH:mm:ss).",
+                                                                                          "example":  "2026-09-09 10:00:00",
+                                                                                          "type":  "string",
+                                                                                          "nullable":  true
+                                                                                      }
+                                                                   }
+                                                },
+                                       "CreateTask":  {
+                                                          "properties":  {
+                                                                             "done":  {
+                                                                                          "enum":  [
+                                                                                                       0,
+                                                                                                       1
+                                                                                                   ],
+                                                                                          "default":  0,
+                                                                                          "type":  "integer"
+                                                                                      },
+                                                                             "title":  {
+                                                                                           "maxLength":  255,
+                                                                                           "minLength":  1,
+                                                                                           "type":  "string"
+                                                                                       }
+                                                                         },
+                                                          "type":  "object",
+                                                          "required":  [
+                                                                           "title"
+                                                                       ]
+                                                      },
+                                       "UpdateTask":  {
+                                                          "properties":  {
+                                                                             "done":  {
+                                                                                          "type":  "integer",
+                                                                                          "enum":  [
+                                                                                                       0,
+                                                                                                       1
+                                                                                                   ]
+                                                                                      },
+                                                                             "title":  {
+                                                                                           "type":  "string",
+                                                                                           "description":  "New title. Database column capacity is 255 characters."
+                                                                                       }
+                                                                         },
+                                                          "minProperties":  1,
+                                                          "type":  "object"
+                                                      },
+                                       "Error":  {
+                                                     "properties":  {
+                                                                        "status":  {
+                                                                                       "type":  "integer"
+                                                                                   },
+                                                                        "error":  {
+                                                                                      "type":  "integer"
+                                                                                  },
+                                                                        "messages":  {
+                                                                                         "type":  "object",
+                                                                                         "additionalProperties":  {
+                                                                                                                      "type":  "string"
+                                                                                                                  }
+                                                                                     }
+                                                                    },
+                                                     "type":  "object",
+                                                     "required":  [
+                                                                      "status",
+                                                                      "error",
+                                                                      "messages"
+                                                                  ]
+                                                 }
+                                   }
+                   }
 }
