@@ -16,7 +16,18 @@ class TaskController extends BaseController
     public function index()
     {
         $tasks = $this->taskModel->findAll();
-        return view('tasks/index', ['tasks' => $tasks]);
+        $totalTasks = count($tasks);
+        $doneTasks = count(array_filter($tasks, static fn ($task) => (bool) $task['done']));
+        $notDoneTasks = $totalTasks - $doneTasks;
+        $donePercent = $totalTasks > 0 ? $doneTasks / $totalTasks * 100 : 0;
+
+        return view('tasks/index', [
+            'tasks' => $tasks,
+            'totalTasks' => $totalTasks,
+            'doneTasks' => $doneTasks,
+            'notDoneTasks' => $notDoneTasks,
+            'donePercent' => $donePercent,
+        ]);
     }
 
     public function create()

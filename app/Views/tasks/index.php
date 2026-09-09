@@ -14,7 +14,6 @@
             <p>No tasks yet. Add your first task above.</p>
         <?php else: ?>
             <table class="task-table">
-                <caption><?= count($tasks) ?> task records</caption>
                 <thead>
                     <tr>
                         <th scope="col">ID</th>
@@ -52,4 +51,5 @@
                 </tbody>
             </table>
         <?php endif; ?>
+        <?= $this->include('partials/task_chart') ?>
 <?= $this->endSection() ?>
