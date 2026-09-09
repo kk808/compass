@@ -159,3 +159,36 @@ button.btn-delete {
     display: inline;
     margin-right: 0.5rem;
 }
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+}
+
+.pagination a {
+    display: block;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 0.25rem;
+    color: #1f2937;
+    text-decoration: none;
+}
+
+.pagination a:hover {
+    background: #f7f8f9;
+}
+
+.pagination .active a {
+    background: #404040;
+    border-color: #404040;
+    color: #fff;
+}
+
+.pagination a:focus-visible {
+    outline: 2px solid #1d4ed8;
+    outline-offset: 2px;
+}

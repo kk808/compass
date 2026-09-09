@@ -15,14 +15,15 @@ class TaskController extends BaseController
 
     public function index()
     {
-        $tasks = $this->taskModel->findAll();
-        $totalTasks = count($tasks);
-        $doneTasks = count(array_filter($tasks, static fn ($task) => (bool) $task['done']));
+        $totalTasks = $this->taskModel->countAllResults();
+        $doneTasks = $this->taskModel->where('done', 1)->countAllResults();
+        $tasks = $this->taskModel->orderBy('id', 'ASC')->paginate(10);
         $notDoneTasks = $totalTasks - $doneTasks;
         $donePercent = $totalTasks > 0 ? $doneTasks / $totalTasks * 100 : 0;
 
         return view('tasks/index', [
             'tasks' => $tasks,
+            'pager' => $this->taskModel->pager,
             'totalTasks' => $totalTasks,
             'doneTasks' => $doneTasks,
             'notDoneTasks' => $notDoneTasks,
